@@ -1,15 +1,17 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 import random
+import os
 
 app = FastAPI(title="MarketMind API")
 
 # Allow the React frontend to talk to this backend (CORS)
+allow_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], # Your React app's URL
+    allow_origins=allow_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -39,15 +41,11 @@ def calculate_trend_score(product_name: str):
 async def get_trending_products():
     # In a real app, this data would come from a database like PostgreSQL or MongoDB
     trending_items = [
-        {"id": 1, "name": "Ergonomic Standing Desk", "category": "Office", "status": "Rising Fast"},
-        {"id": 2, "name": "Matcha Whisk Set", "category": "Kitchen", "status": "Steady Growth"},
-        {"id": 3, "name": "Portable Solar Charger", "category": "Electronics", "status": "Rising Fast"},
+        Product(id=1, name="Ergonomic Standing Desk", category="Office", trendScore=calculate_trend_score("Ergonomic Standing Desk"), status="Rising Fast"),
+        Product(id=2, name="Matcha Whisk Set", category="Kitchen", trendScore=calculate_trend_score("Matcha Whisk Set"), status="Steady Growth"),
+        Product(id=3, name="Portable Solar Charger", category="Electronics", trendScore=calculate_trend_score("Portable Solar Charger"), status="Rising Fast"),
     ]
     
-    # Adding dynamic trend scores using our 'AI' function
-    for item in trending_items:
-        item["trendScore"] = calculate_trend_score(item["name"])
-        
     return trending_items
 
 @app.post("/api/analyze")
