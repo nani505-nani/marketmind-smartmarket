@@ -53,7 +53,7 @@ async def analyze_custom_product(product_name: str = Query(...)):
     return {
         "product": product_name,
         "score": score,
-        "recommendation": "Invest" if score > 80 else "Watch closely"
+       "recommendation": "Invest" if score > 80 else "Watch closely"
     }
 
 if __name__ == "__main__":
