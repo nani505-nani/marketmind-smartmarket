@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
@@ -47,7 +47,7 @@ async def get_trending_products():
     return trending_items
 
 @app.post("/api/analyze")
-async def analyze_custom_product(product_name: str):
+async def analyze_custom_product(product_name: str = Query(...)):
     # Endpoint to allow users to check a specific product not in the list
     score = calculate_trend_score(product_name)
     return {
