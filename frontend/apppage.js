@@ -52,7 +52,11 @@ const MarketMindDashboard = () => {
         <p className="text-lg text-gray-500 font-semibold">Analyzing market trends...</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
+          {filteredProducts.length === 0 ? (
+  <p className="text-gray-500">No products found matching your search.</p>
+) : (
+  // existing grid content
+)}
             <div key={product.id} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
@@ -72,7 +76,14 @@ const MarketMindDashboard = () => {
               </div>
               
               <p className="text-sm font-medium mt-4">
-                Status: <span className={product.status === 'Rising Fast' ? 'text-green-600' : 'text-orange-500'}>
+                const getStatusColor = (status) => {
+  switch(status) {
+    case 'Rising Fast': return 'text-green-600';
+    case 'Steady Growth': return 'text-blue-600';
+    case 'Fading Fad': return 'text-orange-500';
+    default: return 'text-gray-600';
+  }
+};
                   {product.status}
                 </span>
               </p>
@@ -83,5 +94,6 @@ const MarketMindDashboard = () => {
     </div>
   );
 };
+
 
 export default MarketMindDashboard;
